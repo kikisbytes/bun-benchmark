@@ -1,5 +1,11 @@
 version: '3.9'
+networks:
+  monitoring:
+    driver: bridge
 
+#networks:
+#  default:
+#
 services:
   db:
     image: postgres
@@ -9,9 +15,53 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: bun
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin1
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    networks:
+      - monitoring
+
+  node-application-monitoring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/src
+    ports:
+      - 9092:9092
+      - 8080:8080
+      - 4000:4000
+    networks:
+      - monitoring
 
 volumes:
-  db_data:
+  db_data: {}
+  prom_data: {}
