@@ -1,10 +1,8 @@
-import 'dotenv/config';
-import express from 'express';
+import { Elysia } from 'elysia';
 import sequelize from './db/db.js';
 import Book from './db/models/Book.js';
-import './prometheus-exporter-express.js';
+import './prometheus-exporter-elysia.js';
 
-const app = express();
 const port = process.env.PORT || 4000;
 
 sequelize
@@ -28,11 +26,8 @@ sequelize
         console.log('Failed to sync models', err);
     });
 
-app.get('/api/books', async (req, res) => {
-    const books = await Book.findAll();
-    return res.json(books);
-});
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+const app = new Elysia()
+    .get('/api/books', () => {
+        return Book.findAll();
+    })
+    .listen(port);

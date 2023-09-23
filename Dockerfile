@@ -11,14 +11,15 @@ COPY package*.json ./
 
 # Install app dependencies
 #RUN npm install
-#RUN #bun install
+RUN bun install
 
 # Copy the rest of the application code to the container
 COPY . .
 
 # Define the command to run your application
 #CMD [ "node", "src/express.js" ]
-CMD [ "bun", "src/express-bun.js" ]
+#CMD [ "bun", "src/express-bun.js" ]
+CMD [ "bun", "src/elysia-bun.js" ]
 
-#CMD [ "node", "src/node-websocket.js" ]
-#CMD [ "bun run", "src/node-websocket.js" ]
+#CMD [ "node", "src/websocket-node.js" ]
+#CMD [ "bun run", "src/websocket-node.js" ]

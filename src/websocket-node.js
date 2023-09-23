@@ -1,7 +1,7 @@
 import { collectDefaultMetrics, Registry } from 'prom-client';
 import WebSocket, { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
-import express from "express";
+import express from 'express';
 
 // prometheus metrics exporter
 const register = new Registry();
@@ -22,7 +22,6 @@ app.listen(expressPort, () => {
     console.log(`Prometheus exporter is running on port ${expressPort}`);
 });
 
-
 // websocket server
 const webSocketPort = 8080;
 
@@ -36,25 +35,36 @@ wss.on('connection', (ws) => {
     ws.on('message', async (data) => {
         data = JSON.parse(data);
 
-        switch(data.event) {
+        switch (data.event) {
             case 'SETUP':
                 ws.userId = data.userId;
-                console.log(`User "${ws.userId}" (ID: ${clientId}) joined the chat`);
+                console.log(
+                    `User "${ws.userId}" (ID: ${clientId}) joined the chat`
+                );
                 break;
             case 'SAY':
-                console.log(`User "${ws.userId}" (ID: ${clientId}) said: ${data.message}`);
+                console.log(
+                    `User "${ws.userId}" (ID: ${clientId}) said: ${data.message}`
+                );
                 clients.forEach((client) => {
-                    if (client.readyState === WebSocket.OPEN && client.userId !== ws.userId) {
-                        client.send(JSON.stringify({
-                            event: 'CHAT_MSG',
-                            userId: ws.userId,
-                            message: data.message,
-                        }));
+                    if (
+                        client.readyState === WebSocket.OPEN &&
+                        client.userId !== ws.userId
+                    ) {
+                        client.send(
+                            JSON.stringify({
+                                event: 'CHAT_MSG',
+                                userId: ws.userId,
+                                message: data.message,
+                            })
+                        );
                     }
                 });
                 break;
             case 'LEAVE':
-                console.log(`User "${ws.userId}" (ID: ${clientId}) left the chat`);
+                console.log(
+                    `User "${ws.userId}" (ID: ${clientId}) left the chat`
+                );
                 ws.terminate();
                 clients.delete(clientId);
             default:

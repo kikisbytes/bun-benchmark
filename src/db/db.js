@@ -6,7 +6,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     dialect: dbConfig.dialect,
     operatorsAliases: 0,
     pool: dbConfig.pool,
-    logging: false
+    logging: false,
 });
 
 export default sequelize;
