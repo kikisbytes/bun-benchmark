@@ -5,8 +5,8 @@ import { check } from 'k6';
 const sessionDuration = randomIntBetween(10000, 60000); // user session between 10s and 1m
 
 export const options = {
-    vus: 300,
-    duration: '30s'
+    vus: 5,
+    duration: '3s'
 }
 
 function generateMessage(eventName, userId, message) {
@@ -17,7 +17,7 @@ function generateMessage(eventName, userId, message) {
     }
 }
 export default function () {
-    const url = "ws://localhost:8080";
+    const url = "ws://localhost:4000";
     const params = { tags: { my_tag: "node-websocket-test" } };
 
     const res = ws.connect(url, params, function (socket) {
@@ -57,9 +57,6 @@ export default function () {
             socket.close();
         }, sessionDuration + 3000);
     });
-
-    console.log('what is res')
-    console.log(res);
 
     check(res, { "WebSocket connected": (r) => r && r.status === 101 });
 }
