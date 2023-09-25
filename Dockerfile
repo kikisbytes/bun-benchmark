@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-#FROM node:latest
+#FROM node:18.17.1
 
 FROM oven/bun:1.0.2
 

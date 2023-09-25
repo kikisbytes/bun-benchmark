@@ -14,7 +14,7 @@ function configurePrometheusExporter(serviceName = 'express') {
 
     register.setDefaultLabels({
         app: serviceName,
-        serviceName
+        serviceName,
     });
 
     prometheusExporter = express();
@@ -33,7 +33,4 @@ function configurePrometheusExporter(serviceName = 'express') {
     return prometheusExporter;
 }
 
-export {
-    configurePrometheusExporter,
-    prometheusExporter
-}
+export { configurePrometheusExporter, prometheusExporter };

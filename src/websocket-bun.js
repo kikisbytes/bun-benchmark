@@ -7,7 +7,7 @@ const server = Bun.serve({
         if (server.upgrade(req)) {
             return; // do not return a Response
         }
-        return new Response("Upgrade failed :(", { status: 500 });
+        return new Response('Upgrade failed :(', { status: 500 });
     },
     port: webSocketPort,
     websocket: {
@@ -41,14 +41,11 @@ const server = Bun.serve({
                     });
                     break;
                 case 'LEAVE':
-                    console.log(
-                        `User "${ws.userId}" left the chat`
-                    );
+                    console.log(`User "${ws.userId}" left the chat`);
                     ws.terminate();
                     clients.delete(ws.userId);
                 default:
                     break;
-
             }
         },
 

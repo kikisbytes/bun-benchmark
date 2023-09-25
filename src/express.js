@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import sequelize from './db/db.js';
 import Book from './db/models/Book.js';
-import { configurePrometheusExporter } from "./prometheus-exporter-express.js";
+import { configurePrometheusExporter } from './prometheus-exporter-express.js';
 
 configurePrometheusExporter('express');
 

@@ -15,7 +15,7 @@ function configurePrometheusExporter(serviceName = 'elysia') {
 
     register.setDefaultLabels({
         app: serviceName,
-        serviceName
+        serviceName,
     });
 
     prometheusExporter = new Elysia()
@@ -28,7 +28,4 @@ function configurePrometheusExporter(serviceName = 'elysia') {
         .listen(port);
 }
 
-export {
-    configurePrometheusExporter,
-    prometheusExporter
-}
+export { configurePrometheusExporter, prometheusExporter };
