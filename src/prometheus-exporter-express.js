@@ -6,22 +6,34 @@ import {
     currentCPUUsageGauge,
 } from './prometheus-register.js';
 
-register.setDefaultLabels({
-    app: 'express',
-    serviceName: 'express',
-});
+const port = 9092;
+let prometheusExporter;
+function configurePrometheusExporter(serviceName = 'express') {
+    const runTimeName = process.versions?.bun ? 'bun' : 'node';
+    serviceName = `${serviceName}-${runTimeName}}`;
 
-const prometheusExporter = express();
-prometheusExporter.get('/metrics', async (req, res) => {
-    currentMemoryUsageGauge.set(process.memoryUsage().heapUsed);
-    currentCPUUsageGauge.set(await cpu.usage());
+    register.setDefaultLabels({
+        app: serviceName,
+        serviceName
+    });
 
-    res.set('Content-Type', register.contentType);
-    res.end(await register.metrics());
-});
+    prometheusExporter = express();
+    prometheusExporter.get('/metrics', async (req, res) => {
+        currentMemoryUsageGauge.set(process.memoryUsage().heapUsed);
+        currentCPUUsageGauge.set(await cpu.usage());
 
-prometheusExporter.listen(9092, () => {
-    console.log(`Prometheus exporter is running on port 9092`);
-});
+        res.set('Content-Type', register.contentType);
+        res.end(await register.metrics());
+    });
 
-export default prometheusExporter;
+    prometheusExporter.listen(port, () => {
+        console.log(`Prometheus exporter is running on port ${port}`);
+    });
+
+    return prometheusExporter;
+}
+
+export {
+    configurePrometheusExporter,
+    prometheusExporter
+}

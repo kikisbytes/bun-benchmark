@@ -1,7 +1,9 @@
 import { Elysia } from 'elysia';
 import sequelize from './db/db.js';
 import Book from './db/models/Book.js';
-import './prometheus-exporter-elysia.js';
+import { configurePrometheusExporter } from './prometheus-exporter-elysia.js';
+
+configurePrometheusExporter('elysia');
 
 const port = process.env.PORT || 4000;
 

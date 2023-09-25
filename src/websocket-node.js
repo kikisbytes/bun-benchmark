@@ -1,30 +1,10 @@
-import { collectDefaultMetrics, Registry } from 'prom-client';
 import WebSocket, { WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
-import express from 'express';
+import { configurePrometheusExporter } from './prometheus-exporter-express.js';
 
-// prometheus metrics exporter
-const register = new Registry();
-register.setDefaultLabels({
-    app: 'node-websocket',
-    serviceName: 'node-websocket',
-});
-collectDefaultMetrics({ register });
+configurePrometheusExporter('websocket');
 
-const expressPort = 9092;
-const app = express();
-app.get('/metrics', async (req, res) => {
-    res.set('Content-Type', register.contentType);
-    res.end(await register.metrics());
-});
-
-app.listen(expressPort, () => {
-    console.log(`Prometheus exporter is running on port ${expressPort}`);
-});
-
-// websocket server
-const webSocketPort = 8080;
-
+const webSocketPort = 4000;
 const clients = new Map();
 const wss = new WebSocketServer({ port: webSocketPort });
 

@@ -6,18 +6,29 @@ import {
     currentCPUUsageGauge,
 } from './prometheus-register.js';
 
-register.setDefaultLabels({
-    app: 'bun-elysia',
-    serviceName: 'bun-elysia',
-});
+const port = 9092;
+let prometheusExporter;
 
-const prometheusExporter = new Elysia()
-    .get('/metrics', async ({ set }) => {
-        currentMemoryUsageGauge.set(process.memoryUsage().heapUsed);
-        currentCPUUsageGauge.set(await cpu.usage());
-        set.headers['Content-Type'] = register.contentType;
-        return await register.metrics();
-    })
-    .listen(9092);
+function configurePrometheusExporter(serviceName = 'elysia') {
+    const runTimeName = process.versions?.bun ? 'bun' : 'node';
+    serviceName = `${serviceName}-${runTimeName}}`;
 
-export default prometheusExporter;
+    register.setDefaultLabels({
+        app: serviceName,
+        serviceName
+    });
+
+    prometheusExporter = new Elysia()
+        .get('/metrics', async ({ set }) => {
+            currentMemoryUsageGauge.set(process.memoryUsage().heapUsed);
+            currentCPUUsageGauge.set(await cpu.usage());
+            set.headers['Content-Type'] = register.contentType;
+            return await register.metrics();
+        })
+        .listen(port);
+}
+
+export {
+    configurePrometheusExporter,
+    prometheusExporter
+}
