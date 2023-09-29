@@ -1,5 +1,5 @@
 import { Elysia } from 'elysia';
-import { cpu } from 'node-os-utils';
+import osu from 'node-os-utils';
 import {
     register,
     currentMemoryUsageGauge,
@@ -21,7 +21,7 @@ function configurePrometheusExporter(serviceName = 'elysia') {
     prometheusExporter = new Elysia()
         .get('/metrics', async ({ set }) => {
             currentMemoryUsageGauge.set(process.memoryUsage().heapUsed);
-            currentCPUUsageGauge.set(await cpu.usage());
+            currentCPUUsageGauge.set(await osu.cpu.usage());
             set.headers['Content-Type'] = register.contentType;
             return await register.metrics();
         })

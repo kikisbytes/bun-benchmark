@@ -46,6 +46,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin1
     volumes:
       - ./grafana:/etc/grafana/provisioning/datasources
+      - grafana_data:/grafana
     networks:
       - monitoring
 
@@ -65,3 +66,4 @@ services:
 volumes:
   db_data: {}
   prom_data: {}
+  grafana_data: {}

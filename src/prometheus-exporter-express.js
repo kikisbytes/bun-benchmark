@@ -1,5 +1,5 @@
 import express from 'express';
-import { cpu } from 'node-os-utils';
+import osu from 'node-os-utils';
 import {
     register,
     currentMemoryUsageGauge,
@@ -20,7 +20,7 @@ function configurePrometheusExporter(serviceName = 'express') {
     prometheusExporter = express();
     prometheusExporter.get('/metrics', async (req, res) => {
         currentMemoryUsageGauge.set(process.memoryUsage().heapUsed);
-        currentCPUUsageGauge.set(await cpu.usage());
+        currentCPUUsageGauge.set(await osu.cpu.usage());
 
         res.set('Content-Type', register.contentType);
         res.end(await register.metrics());

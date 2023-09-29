@@ -5,7 +5,7 @@ import { configurePrometheusExporter } from './prometheus-exporter-elysia.js';
 
 configurePrometheusExporter('elysia');
 
-const port = process.env.PORT || 4000;
+const port = 4000;
 
 sequelize
     .sync()

@@ -1,3 +1,7 @@
+import { configurePrometheusExporter } from './prometheus-exporter-elysia.js';
+
+configurePrometheusExporter('bun-websocket-native');
+
 const webSocketPort = 4000;
 const clients = new Map();
 

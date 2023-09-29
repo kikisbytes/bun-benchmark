@@ -8,8 +8,8 @@ import { check } from 'k6';
 const sessionDuration = randomIntBetween(10000, 60000); // user session between 10s and 1m
 
 export const options = {
-    vus: 5,
-    duration: '3s',
+    vus: 290,
+    duration: '30s',
 };
 
 function generateMessage(eventName, userId, message) {
