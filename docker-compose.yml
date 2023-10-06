@@ -3,9 +3,6 @@ networks:
   monitoring:
     driver: bridge
 
-#networks:
-#  default:
-#
 services:
   db:
     image: postgres

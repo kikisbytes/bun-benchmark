@@ -10,7 +10,7 @@ COPY package*.json ./
 
 # Install app dependencies
 #RUN npm install
-RUN bun install
+#RUN bun install
 
 # Copy the rest of the application code to the container
 COPY . .
@@ -21,6 +21,6 @@ COPY . .
 #CMD [ "bun", "src/elysia-bun.js" ]
 
 #CMD [ "node", "src/websocket-node.js" ]
-#CMD [ "bun", "src/websocket-node.js" ]
-CMD [ "bun", "src/websocket-bun.js" ]
+CMD [ "bun", "src/websocket-node.js" ]
+#CMD [ "bun", "src/websocket-bun.js" ]
 
